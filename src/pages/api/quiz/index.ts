@@ -1,5 +1,7 @@
 import questions from '../questions/questions-database'
+import {randomArrayNumber} from '../../../functions/arrays'
 
 export default function handler(req, res) {
-    res.status(200).json(questions.map(question => question.id))
+    const ids = questions.map(questions => questions.id)
+    res.status(200).json(randomArrayNumber(ids))
 }

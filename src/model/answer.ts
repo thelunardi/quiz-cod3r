@@ -3,7 +3,7 @@ export default class AnswerModel {
     #isAnswerRight: boolean
     #wasShown: boolean
 
-    constructor(value: string, wasShown: boolean, isAnswerRight = false) {
+    constructor(value: string, isAnswerRight: boolean, wasShown = false) {
         this.#value = value
         this.#isAnswerRight = isAnswerRight
         this.#wasShown = wasShown
@@ -29,10 +29,14 @@ export default class AnswerModel {
         return this.#isAnswerRight
     }
 
+    showAnswer() {
+        return new AnswerModel(this.#value, this.#isAnswerRight, true)
+    }
+
     convertToObject() {
         return {
             value: this.#value,
-            isAnswerRight: this.#wasShown,
+            isAnswerRight: this.#isAnswerRight,
             wasShown: this.#wasShown,
         }
     }

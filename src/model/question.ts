@@ -1,4 +1,6 @@
 import AnswerModel from './answer'
+import {randomArrayNumber} from "../functions/arrays";
+import questions from "../pages/api/questions/questions-database";
 
 export default class QuestionModel {
     #id: number
@@ -39,12 +41,32 @@ export default class QuestionModel {
         return false
     }
 
+    answerWith(index: number): QuestionModel {
+        const answeredRight = this.#answers[index]?.isAnswerRight
+        const answers = this.#answers.map((answer, i) => {
+            const answerSelected = index === i
+
+            // lógica para exibir a questão correta, independentemente da resposta
+            // const mustShowAnswer = answerSelected || answer.isAnswerRight
+            // return mustShowAnswer ? answer.showAnswer() : answer
+
+            return answerSelected ? answer.showAnswer() : answer
+        })
+        return new QuestionModel(this.id, this.question, answers, answeredRight)
+    }
+
+    randomizeAnswers(): QuestionModel {
+        let randomAnswers = randomArrayNumber(this.#answers)
+        return new QuestionModel(this.#id, this.#question, randomAnswers, this.#isAnswerRight)
+    }
+
     convertToObject() {
         return {
             id: this.#id,
             question: this.#question,
-            answers: this.#answers.map(answer => answer.convertToObject()),
-            isAnswerRight: this.#isAnswerRight
+            wasAnswered: this.wasAnswered,
+            isAnswerRight: this.#isAnswerRight,
+            answers: this.#answers.map(answer => answer.convertToObject())
         }
     }
 }

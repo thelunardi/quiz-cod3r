@@ -6,7 +6,8 @@ export default function handler(req, res) {
     const questionSelected = questions.filter(question => question.id === selectedId)
 
     if (questionSelected.length === 1) {
-        res.status(200).json(questionSelected[0].convertToObject())
+        const question = questionSelected[0].randomizeAnswers()
+        res.status(200).json(question.convertToObject())
     }
     res.status(204).send()
 }
