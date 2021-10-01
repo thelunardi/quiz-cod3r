@@ -4,13 +4,13 @@ import questions from "../pages/api/questions/questions-database";
 
 export default class QuestionModel {
     #id: number
-    #question: string
+    #title: string
     #answers: AnswerModel[]
     #isAnswerRight: boolean
 
     constructor(id: number, question: string, answers: AnswerModel[], isAnswerRight = false) {
         this.#id = id
-        this.#question = question
+        this.#title = question
         this.#answers = answers
         this.#isAnswerRight = isAnswerRight
     }
@@ -19,8 +19,8 @@ export default class QuestionModel {
         return this.#id
     }
 
-    get question() {
-        return this.#question
+    get title() {
+        return this.#title
     }
 
     get answers() {
@@ -41,6 +41,10 @@ export default class QuestionModel {
         return false
     }
 
+    get wasNotAnswered() {
+        return !this.wasAnswered
+    }
+
     answerWith(index: number): QuestionModel {
         const answeredRight = this.#answers[index]?.isAnswerRight
         const answers = this.#answers.map((answer, i) => {
@@ -52,18 +56,18 @@ export default class QuestionModel {
 
             return answerSelected ? answer.showAnswer() : answer
         })
-        return new QuestionModel(this.id, this.question, answers, answeredRight)
+        return new QuestionModel(this.id, this.title, answers, answeredRight)
     }
 
     randomizeAnswers(): QuestionModel {
         let randomAnswers = randomArrayNumber(this.#answers)
-        return new QuestionModel(this.#id, this.#question, randomAnswers, this.#isAnswerRight)
+        return new QuestionModel(this.#id, this.#title, randomAnswers, this.#isAnswerRight)
     }
 
     convertToObject() {
         return {
             id: this.#id,
-            question: this.#question,
+            question: this.#title,
             wasAnswered: this.wasAnswered,
             isAnswerRight: this.#isAnswerRight,
             answers: this.#answers.map(answer => answer.convertToObject())
