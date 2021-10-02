@@ -14,6 +14,7 @@ const options = [
 
 interface QuestionProps {
     question: QuestionModel
+    timeToAnswer?: number
     onResponse: (index: number) => void
     timeIsOver: () => void
 }
@@ -25,7 +26,7 @@ export default function Question(props: QuestionProps) {
         return question.answers.map((answer, i) => {
             return (
                 <Answer
-                    key={i}
+                    key={`${question.id}-${i}`}
                     answer={answer}
                     index={i}
                     option={options[i].value}
@@ -39,7 +40,11 @@ export default function Question(props: QuestionProps) {
     return (
         <div className={styles.question}>
             <QuestionTitle text={question.title} />
-            <Timer duration={10} timeIsOver={props.timeIsOver} />
+            <Timer
+                key={question.id}
+                duration={props.timeToAnswer ?? 10}
+                timeIsOver={props.timeIsOver}
+            />
             {renderAnswers()}
         </div>
     )

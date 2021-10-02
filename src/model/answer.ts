@@ -33,6 +33,11 @@ export default class AnswerModel {
         return new AnswerModel(this.#value, this.#isAnswerRight, true)
     }
 
+    // como o objeto tem os mesmos atributos, é possível utilizar o type
+    static convertObjectToModel(object: AnswerModel): AnswerModel {
+        return new AnswerModel(object.value, object.isAnswerRight, object.wasShown)
+    }
+
     convertToObject() {
         return {
             value: this.#value,

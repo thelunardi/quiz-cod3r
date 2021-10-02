@@ -1,5 +1,5 @@
 import AnswerModel from './answer'
-import {randomArrayNumber} from "../functions/arrays";
+import {randomArrayNumber} from '../functions/arrays'
 import questions from "../pages/api/questions/questions-database";
 
 export default class QuestionModel {
@@ -8,9 +8,9 @@ export default class QuestionModel {
     #answers: AnswerModel[]
     #isAnswerRight: boolean
 
-    constructor(id: number, question: string, answers: AnswerModel[], isAnswerRight = false) {
+    constructor(id: number, title: string, answers: AnswerModel[], isAnswerRight = false) {
         this.#id = id
-        this.#title = question
+        this.#title = title
         this.#answers = answers
         this.#isAnswerRight = isAnswerRight
     }
@@ -51,10 +51,11 @@ export default class QuestionModel {
             const answerSelected = index === i
 
             // lógica para exibir a questão correta, independentemente da resposta
-            // const mustShowAnswer = answerSelected || answer.isAnswerRight
-            // return mustShowAnswer ? answer.showAnswer() : answer
+            const mustShowAnswer = answerSelected || answer.isAnswerRight
+            return mustShowAnswer ? answer.showAnswer() : answer
 
-            return answerSelected ? answer.showAnswer() : answer
+            // retorno para NÃO exibir a questão correta caso o user erre
+            // return answerSelected ? answer.showAnswer() : answer
         })
         return new QuestionModel(this.id, this.title, answers, answeredRight)
     }
@@ -64,10 +65,16 @@ export default class QuestionModel {
         return new QuestionModel(this.#id, this.#title, randomAnswers, this.#isAnswerRight)
     }
 
+    // como o objeto tem os mesmos atributos, é possível utilizar o type
+    static convertObjectToModel(object: QuestionModel): QuestionModel {
+        const answers = object.answers.map(response => AnswerModel.convertObjectToModel(response))
+        return new QuestionModel(object.id, object.title, answers, object.isAnswerRight)
+    }
+
     convertToObject() {
         return {
             id: this.#id,
-            question: this.#title,
+            title: this.#title,
             wasAnswered: this.wasAnswered,
             isAnswerRight: this.#isAnswerRight,
             answers: this.#answers.map(answer => answer.convertToObject())
