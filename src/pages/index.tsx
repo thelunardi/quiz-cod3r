@@ -3,8 +3,9 @@ import {useRouter} from 'next/router'
 
 import QuestionModel from '../model/question'
 import Quiz from '../components/Quiz'
+import getConfig from "next/dist/build/babel/loader/get-config";
 
-const URL_BASE = 'http://localhost:3000/api'
+const URL_BASE = process.env.BASE_URL ?? 'http://localhost:3000/api'
 
 export default function Home() {
     const router = useRouter()
