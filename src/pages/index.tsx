@@ -3,7 +3,6 @@ import {useRouter} from 'next/router'
 
 import QuestionModel from '../model/question'
 import Quiz from '../components/Quiz'
-import getConfig from "next/dist/build/babel/loader/get-config";
 
 const URL_BASE = process.env.NEXT_PUBLIC_BASE_URL ?? 'http://localhost:3000/api'
 
